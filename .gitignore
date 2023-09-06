@@ -3,9 +3,13 @@
 /.gradle
 gradlew
 gradlew.bat
+/build
 
 ### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
 *.ipr
+
+### Error Files ###
+hs_err_pid*.log
