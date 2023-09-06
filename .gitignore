@@ -10,3 +10,6 @@ gradlew.bat
 *.iws
 *.iml
 *.ipr
+
+### Error Files ###
+hs_err_pid*.log
