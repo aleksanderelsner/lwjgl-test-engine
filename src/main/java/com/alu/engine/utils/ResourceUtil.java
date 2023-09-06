@@ -13,7 +13,7 @@ public class ResourceUtil {
         try {
             return getResourceAInputStream(path).readAllBytes();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read bytes from resource: " +  path);
+            throw new RuntimeException("Failed to read bytes from resource: " + path);
         }
     }
 

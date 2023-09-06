@@ -1,6 +1,6 @@
 package com.alu.engine;
 
-public interface Scene {
+public interface Screen {
 
     void init();
 
