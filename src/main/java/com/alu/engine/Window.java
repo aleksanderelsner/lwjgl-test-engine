@@ -3,11 +3,12 @@ package com.alu.engine;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
 
-    private final long window;
+    private final long windowHandle;
     private final Screen screen;
 
     public Window() {
@@ -15,19 +16,31 @@ public class Window {
             glfwTerminate();
             throw new IllegalStateException("Failed to initalise glfw");
         }
-        window = glfwCreateWindow(1500, 750, "Window", NULL, NULL);
-        screen = new HelloTriangleScreen();
+        windowHandle = glfwCreateWindow(1500, 750, "Window", NULL, NULL);
+        screen = new HelloCubeScene();
     }
 
     public void start() {
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(windowHandle);
         GL.createCapabilities();
-        glfwShowWindow(window);
+        glfwShowWindow(windowHandle);
         screen.init();
-        while (!glfwWindowShouldClose(window)) {
-            glfwSwapBuffers(window);
+
+        double frameStart = glfwGetTime();
+        double frameFinish;
+        double deltaTime = 0;
+        while (!glfwWindowShouldClose(windowHandle)) {
+            
+            glClearColor(0.5f, 0.2f, 0.1f, 1f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            screen.loop(deltaTime);
+
+            glfwSwapBuffers(windowHandle);
             glfwPollEvents();
-            screen.loop();
+            frameFinish = glfwGetTime();
+            deltaTime = frameFinish - frameStart;
+            frameStart = frameFinish;
         }
         glfwTerminate();
     }

@@ -1,11 +1,16 @@
 package com.alu.engine.rendering;
 
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
+
 import static com.alu.engine.utils.ResourceUtil.getResourceAsString;
 import static org.lwjgl.opengl.GL46.*;
 
 public class Shader {
 
-    private final String vertexSource, fragmentSource, name;
+    private final String vertexSource;
+    private final String fragmentSource;
+    private final String name;
     private int program;
 
     public Shader(String shaderName) {
@@ -53,5 +58,11 @@ public class Shader {
 
     public void detach() {
         glUseProgram(0);
+    }
+
+    public void uniformMat4f(final String name, final Matrix4f mat4f) {
+        final var loc = glGetUniformLocation(program, name);
+        final var buffer = BufferUtils.createFloatBuffer(16);
+        glUniformMatrix4fv(loc, false, mat4f.get(buffer));
     }
 }

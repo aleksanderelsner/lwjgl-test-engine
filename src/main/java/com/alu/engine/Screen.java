@@ -4,5 +4,5 @@ public interface Screen {
 
     void init();
 
-    void loop();
+    void loop(double deltaTime);
 }
