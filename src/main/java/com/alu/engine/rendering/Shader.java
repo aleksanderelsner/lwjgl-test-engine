@@ -1,57 +1,51 @@
 package com.alu.engine.rendering;
 
+import lombok.Getter;
+
+import java.util.Map;
+
 import static com.alu.engine.utils.ResourceUtil.getResourceAsString;
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
 
-    private final String vertexSource, fragmentSource, name;
-    private int program;
+    @Getter
+    private int id;
+    @Getter
+    private boolean compiled;
+    private final int type;
+    private final String source;
 
-    public Shader(String shaderName) {
-        this.name = shaderName;
-        vertexSource = getResourceAsString("shaders/" + shaderName + "/vertex.glsl");
-        fragmentSource = getResourceAsString("shaders/" + shaderName + "/fragment.glsl");
-    }
+    private final static Map<Integer, String> typeToExtension = Map.of(
+            GL_VERTEX_SHADER, "vert",
+            GL_FRAGMENT_SHADER, "frag"
+    );
 
-    public void compile() {
-        final var vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex, vertexSource);
-        glCompileShader(vertex);
-
-        if (glGetShaderi(vertex, GL_COMPILE_STATUS) == GL_FALSE) {
-            throw new IllegalStateException(String.format("Failed to compile vertex shader '%s': %s",
-                    name, glGetShaderInfoLog(vertex)));
+    public Shader(final String name, final int type) {
+        final var fileExt = typeToExtension.get(type);
+        if (fileExt == null) {
+            throw new RuntimeException("Invalid shader type" + type);
         }
 
-        final var fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragment, fragmentSource);
-        glCompileShader(fragment);
-
-        if (glGetShaderi(fragment, GL_COMPILE_STATUS) == GL_FALSE) {
-            throw new IllegalStateException(String.format("Failed to compile fragment shader '%s': %s",
-                    name, glGetShaderInfoLog(fragment)));
-        }
-
-        program = glCreateProgram();
-        glAttachShader(program, vertex);
-        glAttachShader(program, fragment);
-        glLinkProgram(program);
-
-        if (glGetProgrami(program, GL_LINK_STATUS) == GL_FALSE) {
-            throw new IllegalStateException(String.format("Failed to compile fragment shader '%s': %s",
-                    name, glGetProgramInfoLog(fragment)));
-        }
-
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
+        this.source = getResourceAsString("shaders/%s.%s".formatted(name, fileExt));
+        this.type = type;
     }
 
-    public void use() {
-        glUseProgram(program);
-    }
+    public int compile() {
+        compiled = true;
+        id = glCreateShader(type);
 
-    public void detach() {
-        glUseProgram(0);
+        glShaderSource(id, source);
+        glCompileShader(id);
+
+        final var status = glGetShaderi(id, GL_COMPILE_STATUS);
+
+        if (status == GL_FALSE) {
+            final var length = glGetShaderi(id, GL_INFO_LOG_LENGTH);
+            final var infoLog = glGetShaderInfoLog(id, length);
+            throw new RuntimeException(infoLog);
+        }
+
+        return id;
     }
 }

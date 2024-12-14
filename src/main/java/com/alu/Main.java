@@ -1,9 +1,10 @@
 package com.alu;
 
-import com.alu.engine.Window;
+import com.alu.engine.Engine;
 
 public class Main {
-    public static void main(String[] args) {
-        new Window().start();
+
+    public static void main(final String[] args) {
+        new Engine().run();
     }
 }
