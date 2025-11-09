@@ -16,7 +16,8 @@ public class Player {
     private double pitch, yaw;
 
     public Player() {
-        position = new Vector3f(0, 0, 0);
+        //position = new Vector3f(World.SIZE / 2, 2, World.SIZE / 2);
+        position = new Vector3f(0, 2, 0);
         front = new Vector3f(0, 0, -1);
         up = new Vector3f(0, 1, 0);
 
@@ -57,7 +58,6 @@ public class Player {
         if (inputHandler.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
             position.y -= speed;
         }
-        System.out.println("Position " + position);
         if (inputHandler.isMouseMoving()) {
             yaw += inputHandler.deltaMousePosX() * deltaTime;
             pitch -= inputHandler.deltaMousePosY() * deltaTime;

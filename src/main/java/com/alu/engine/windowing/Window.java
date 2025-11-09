@@ -19,8 +19,8 @@ public class Window {
             throw new IllegalStateException("Failed to init GLFW");
         }
 
-        height = 700;
-        width = 1500;
+        height = 1080;
+        width = 1920;
         handle = glfwCreateWindow(width, height, "Window", NULL, NULL);
 
         glfwMakeContextCurrent(handle);

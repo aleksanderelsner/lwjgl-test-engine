@@ -1,14 +1,12 @@
 #version 330 core
 
 in vec3 pos;
-in vec4 gl_FragCoord;
+in vec2 texCoord;
 
 out vec4 FragColor;
 
+uniform sampler2D tex;
+
 void main() {
-    if (pos.x == gl_FragCoord.x) {
-        FragColor = vec4(0, 0, 0, 1);
-    } else {
-        FragColor = vec4(pos, 1.0f);
-    }
+    FragColor = texture(tex, texCoord);
 }

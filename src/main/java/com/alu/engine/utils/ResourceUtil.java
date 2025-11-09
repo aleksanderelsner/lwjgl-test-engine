@@ -11,13 +11,13 @@ public class ResourceUtil {
 
     public static byte[] getResourceAsByteArray(final String path) {
         try {
-            return getResourceAInputStream(path).readAllBytes();
+            return getResourceAsStream(path).readAllBytes();
         } catch (IOException e) {
             throw new RuntimeException("Failed to read bytes from resource: " + path);
         }
     }
 
-    public static InputStream getResourceAInputStream(final String path) {
+    public static InputStream getResourceAsStream(final String path) {
         return ResourceUtil.class.getClassLoader().getResourceAsStream(path);
     }
 }
